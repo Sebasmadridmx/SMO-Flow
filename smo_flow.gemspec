@@ -26,8 +26,9 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["homepage_uri"]    = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/Sebasmadridmx/SMO-Flow"
+  spec.metadata["source_code_uri"] = "https://github.com/Sebasmadridmx/SMO-Flow/tree/main"
   spec.metadata["changelog_uri"]   = "https://github.com/Sebasmadridmx/SMO-Flow/blob/main/CHANGELOG.md"
+  spec.metadata["bug_tracker_uri"] = "https://github.com/Sebasmadridmx/SMO-Flow/issues"
 
   spec.files         = Dir["lib/**/*", "LICENSE.txt", "README.md", "CHANGELOG.md"]
   spec.require_paths = ["lib"]
