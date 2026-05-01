@@ -1,43 +1,80 @@
-# SmoFlow
+# SMO Flow
 
-TODO: Delete this and the text below, and describe your gem
+A Ruby library for calculating subcatchment output flow using component-based drainage calculations.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/smo_flow`. To experiment with that code, run `bin/console` for an interactive prompt.
+Created by Sebastian Madrid Ontiveros.
+
+## Overview
+
+SMO Flow provides a simple, transparent, and developer-friendly toolkit for estimating flow contributions from different parts of a subcatchment, such as roads, roofs, permeable areas, foul flow, and trade flow.
+
+The initial version focuses on timestep-based Rational Method runoff calculations.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+````gem 'smo_flow'```
 
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-```
-
-If bundler is not being used to manage dependencies, install the gem by executing:
+Or install it directly:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install smo_flow
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Rational Method — Flow from Rainfall Intensity
 
-## Development
+```ruby
+require "smo_flow"
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+calc = SmoFlow::RationalMethod.new(coefficient: 0.9, area: 2.5)
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+# Flow in m³/s
+calc.flow_from_intensity(50.0)   # => 0.3125
 
-## Contributing
+# Flow in L/s
+calc.flow_ls_from_intensity(50.0)  # => 312.5
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/smo_flow. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/smo_flow/blob/main/CODE_OF_CONDUCT.md).
+### Flow from Rainfall Depth and Timestep
 
-## License
+```ruby
+calc = SmoFlow::RationalMethod.new(coefficient: 0.9, area: 2.5)
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+# Flow in m³/s from 5mm of rain over 1 hour
+calc.flow_from_depth(depth: 5.0, timestep: 3600.0)  # => 0.03125
+```
 
-## Code of Conduct
+### Multiple Subcatchments
 
-Everyone interacting in the SmoFlow project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/smo_flow/blob/main/CODE_OF_CONDUCT.md).
+```ruby
+road  = SmoFlow::RationalMethod.new(coefficient: 0.9, area: 1.5)
+roof  = SmoFlow::RationalMethod.new(coefficient: 0.95, area: 0.8)
+grass = SmoFlow::RationalMethod.new(coefficient: 0.3, area: 2.0)
+
+intensity = 50.0  # mm/hr
+
+total = road.flow_from_intensity(intensity) +
+        roof.flow_from_intensity(intensity) +
+        grass.flow_from_intensity(intensity)
+```
+
+### Convert Depth to Intensity
+
+```ruby
+calc.depth_to_intensity(depth: 5.0, timestep: 3600.0)  # => 5.0 mm/hr
+```
+
+### Runoff Volume
+
+```ruby
+calc.volume(depth: 5.0)  # => 112.5 m³
+```
+
+## Formulas
+
+### Flow from Intensity
+````
+Q = C × i × A / 360
