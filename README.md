@@ -1,14 +1,18 @@
 # SMO Flow
 
-A Ruby library for calculating subcatchment output flow using component-based drainage calculations.
+[![Gem Version](https://badge.fury.io/rb/smo_flow.svg)](https://badge.fury.io/rb/smo_flow)
 
-Created by Sebastian Madrid Ontiveros.
+SMO Flow is a Ruby library created by Sebastian Madrid Ontiveros to help support hydraulic modelling in the UK and around the world.
+
+It was developed in response to the lack of hydraulic modelling libraries available for Ruby, with the aim of making subcatchment runoff and flow calculations simpler, clearer, and more accessible.
+
+If you find this project useful and would like to support its development, please consider donating:
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support%20this%20project-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/smadrid)
 
 ## Overview
 
-SMO Flow provides a simple, transparent, and developer-friendly toolkit for estimating flow contributions from different parts of a subcatchment, such as roads, roofs, permeable areas, foul flow, and trade flow.
-
-The initial version focuses on timestep-based Rational Method runoff calculations.
+The library provides a developer-friendly way to estimate flow from roads, roofs, permeable areas, foul flow, and trade flow, using the Rational Method and timestep-based calculations.
 
 ## Installation
 
